@@ -3,7 +3,7 @@
 console.log("Server Starting");
 
 require("dotenv").config();
-require('dotenv-safe').config({
+require("dotenv-safe").config({
     allowEmptyValues: true
 })
 
@@ -11,10 +11,10 @@ const express = require("express");
 const app = express();
 
 const bodyParser = require("body-parser");
-const jwt = require('jsonwebtoken');
-const db = require('./database');
+const jwt = require("jsonwebtoken");
+const db = require("./database");
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 // will change to enviroment variable when deploying
 // const secret = process.env.secretvarname
@@ -30,12 +30,24 @@ app.use(bodyParser.urlencoded({
  */
 app.use(bodyParser.json());
 
-app.post('/login', function(req, res) {
+app.get("/users", function(req, res) {
+    getUsers(req, res);
+});
+
+app.get("/events", function(req, res) {
+    getEvents(req, res);
+});
+
+app.post("/events", function(req, res) {
+    createEvent(req, res);
+});
+
+app.post("/login", function(req, res) {
     console.log(req.body);
     processLogin(req, res);
 });
 
-app.post('/register', function(req, res) {
+app.post("/register", function(req, res) {
     console.log(req.body);
     createAccount(req, res);
 });
@@ -45,7 +57,7 @@ app.post('/register', function(req, res) {
 let processLogin = (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-    db.findUser('username', username)
+    db.findUser("username", username)
         .then((user) => {
             console.log(user);
             bcrypt.compare(password, user[0].password)
@@ -72,7 +84,7 @@ let processLogin = (req, res) => {
 
 let createToken = (user) => {
     let token = jwt.sign({ userID: user.id },
-        secret, { expiresIn: '7d' }
+        secret, { expiresIn: "7d" }
     );
     return token;
 };
@@ -83,15 +95,15 @@ let createAccount = (req, res) => {
     bcrypt.hash(userData.password, saltRounds)
         .then(encryptedPwd => {
             db.insertUser(userData.username, encryptedPwd, userData.location, userData.email)
-                .then(() => res.end('New User Stored'))
+                .then(() => res.end("New User Stored"))
                 .catch(error => {
                     console.log(error);
-                    res.end('Failed to store User');
+                    res.end("Failed to store User");
                 })
         })
         .catch(error => {
             console.log(error);
-            res.end('Failed to generate Hash');
+            res.end("Failed to generate Hash");
         })
 };
 
@@ -108,11 +120,44 @@ let userAuthorization = (request, response) => {
         console.log(err);
     }
     if (payload) {
-        console.log('Payload', payload);
-        console.log('User Authorization', payload.userID);
+        console.log("Payload", payload);
+        console.log("User Authorization", payload.userID);
         return userID = payload.userID;
     }
     return false;
 };
+
+let getUsers = (req, res) => {
+    if (userAuthorization(req, res)) {
+        db.getAllUsers()
+            .then(usersList => {
+                res.end(JSON.stringify(usersList));
+            })
+    }
+};
+
+let createEvent = (req, res) => {
+    console.log("createEvent", req.body);
+    let eventData = req.body;
+    db.insertEvent(eventData.userid, eventData.eventtitle, eventData.eventdate, eventData.eventdescription, eventData.eventsize, eventData.eventtype, eventData.mealtype, eventData.clientname, JSON.stringify(eventData.menu), JSON.stringify(eventData.shoppinglist))
+        .then(() => res.end("New Event Stored"))
+        .catch(error => {
+            console.log(error);
+            res.end("Failed to store Event");
+        })
+        .catch(error => {
+            console.log(error);
+            res.end("Failed to generate Hash");
+        })
+};
+
+let getEvents = (req, res) => {
+    if (userAuthorization(req, res)) {
+        db.getAllEvents()
+            .then(eventsList => {
+                res.end(JSON.stringify(eventsList));
+            })
+    }
+}
 
 app.listen(process.env.PORT || 3000, () => console.log("Server is now listening."));

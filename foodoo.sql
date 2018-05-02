@@ -4,11 +4,11 @@ CREATE DATABASE foodoo;
 \c foodoo;
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR (100) UNIQUE NOT NULL,
-    password VARCHAR (100) NOT NULL,
-    location VARCHAR (150),
-    email VARCHAR(100) UNIQUE NOT NULL
+  id SERIAL PRIMARY KEY,
+  username VARCHAR (100) UNIQUE NOT NULL,
+  password VARCHAR (100) NOT NULL,
+  location VARCHAR (150),
+  email VARCHAR(100) UNIQUE NOT NULL
 );
 
 CREATE TABLE clients (
@@ -30,14 +30,15 @@ for example, menu can be saved as '{
 same thing for shoppinglist as well:
 */
 CREATE TABLE events (
-  id SERIAL PRIMARY KEY,
+  eventId SERIAL PRIMARY KEY,
   userId INTEGER NOT NULL,
-  name VARCHAR (150) UNIQUE NOT NULL,
-  eventdate TIMESTAMP,
-  description VARCHAR (150),
-  capacty INTEGER,
-  type VARCHAR (50),
-  client VARCHAR (100),
+  eventTitle VARCHAR (150) UNIQUE NOT NULL,
+  eventDate TIMESTAMP,
+  eventDescription VARCHAR (150),
+  eventSize INTEGER,
+  eventType VARCHAR (50),
+  mealType VARCHAR (50),
+  clientName VARCHAR (100),
   menu JSON,
   shoppingList JSON
 );

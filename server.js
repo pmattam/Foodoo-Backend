@@ -20,6 +20,12 @@ const saltRounds = 10;
 // const secret = process.env.secretvarname
 const secret = process.env.SECRET
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 // useful for grabing data out of post requests
 app.use(bodyParser.urlencoded({
     extended: true

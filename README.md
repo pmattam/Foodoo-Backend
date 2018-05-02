@@ -1,15 +1,15 @@
 # Foodoo-Backend
 
-### DB notes
+#### DB notes
 * psql -d postgres -f ./foodoo.sql   ====> creates db and tables
 * psql -d foodoo  ==========> opens up db in terminal
 
 
-## Create a new Event - POST -  http://localhost:3001/events
+#### Create a new Event - POST -  http://localhost:3001/events
 
-## Headers - Authorization: Bearer <token>
+#### Headers - Authorization: Bearer <token>
 
-## Body - 
+#### Body - 
 
 {
         "userid": 3,
@@ -45,23 +45,25 @@
         ]
     }
 
-### Get All Events - GET - http://localhost:3001/events
-
-## Headers - Authorization: Bearer <token>
 
 
+#### Get All Events - GET - http://localhost:3001/events
 
-### Get All Users - http://localhost:3001/users
-
-## Headers - Authorization: Bearer <token>
+#### Headers - Authorization: Bearer <token>
 
 
 
-### Login Existing User - POST - http://localhost:3001/login
+#### Get All Users - http://localhost:3001/users
 
-## content-type: application/json
+#### Headers - Authorization: Bearer <token>
 
-## Body - for each user
+
+
+#### Login Existing User - POST - http://localhost:3001/login
+
+#### content-type: application/json
+
+#### Body - for each user
 
 { "email": "dylan@d.com", "password": "dylan" }
 
@@ -72,10 +74,10 @@
 { "email": "prathyusha@m.com", "password": "prathyusha" } 
 
 
-### Register new user - POST -  http://localhost:3001/register
+#### Register new user - POST -  http://localhost:3001/register
 
-## Header - Content-Type - application/json
+#### Header - Content-Type - application/json
 
-## Body - 
+#### Body - 
 
 { "username": "Janelle Alexander", "password": "janelle", "location": "Atlanta, GA", "email": "janelle@j.com" }

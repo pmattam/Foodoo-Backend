@@ -23,8 +23,10 @@ let getAllUsers = () => {
 };
 
 let insertUser = (username, password, location, email) => {
-    return db.query(`INSERT INTO users (username, password, location, email) 
-                    VALUES ('${username}', '${password}', '${location}', '${email}'); `)
+    let qstr = `INSERT INTO users (username, password, location, email) 
+                    VALUES ('${username}', '${password}', '${location}', '${email}'); `;
+    console.log(qstr);
+    return db.query(qstr);
 };
 
 let getAllEvents = () => {

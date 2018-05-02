@@ -55,9 +55,9 @@ app.post("/register", function(req, res) {
 // login related
 // Function to Handle Login Request
 let processLogin = (req, res) => {
-    let username = req.body.username;
+    let email = req.body.email;
     let password = req.body.password;
-    db.findUser("username", username)
+    db.findUser("email", email)
         .then((user) => {
             console.log(user);
             bcrypt.compare(password, user[0].password)
@@ -144,10 +144,6 @@ let createEvent = (req, res) => {
         .catch(error => {
             console.log(error);
             res.end("Failed to store Event");
-        })
-        .catch(error => {
-            console.log(error);
-            res.end("Failed to generate Hash");
         })
 };
 

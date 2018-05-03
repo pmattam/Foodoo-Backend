@@ -66,6 +66,12 @@ let processLogin = (req, res) => {
     db.findUser("email", email)
         .then((user) => {
             console.log(user);
+            if (user.length === 0) {
+                errorObj = {};
+                errorObj.status = "failed";
+                errorObj.reason = "No user found";
+                res.end(JSON.stringify(errorObj));
+            }
             bcrypt.compare(password, user[0].password)
                 .then(isValid => {
                     if (isValid) {
@@ -78,12 +84,20 @@ let processLogin = (req, res) => {
                         userObj.jwt = token;
                         res.end(JSON.stringify(userObj));
                     } else {
-                        res.end('No token for you');
+                        errorObj = {};
+                        errorObj.status = "failed";
+                        errorObj.reason = "No token for you";
+                        console.log(error);
+                        res.end(JSON.stringify(errorObj));
+                        // res.end('No token for you');
                     }
                 })
                 .catch(error => {
+                    errorObj = {};
+                    errorObj.status = "failed";
+                    errorObj.reason = "Failed to Login";
                     console.log(error);
-                    res.end('Failed to Login');
+                    res.end(JSON.stringify(errorObj));
                 })
         })
 };

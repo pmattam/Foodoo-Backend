@@ -119,10 +119,18 @@ let createAccount = (req, res) => {
     bcrypt.hash(userData.password, saltRounds)
         .then(encryptedPwd => {
             db.insertUser(userData.username, encryptedPwd, userData.location, userData.email)
-                .then(() => res.end("New User Stored"))
+                .then(() => {
+                    statusObj = {};
+                    statusObj.status = "success";
+                    statusObj.reason = "New User Stored";
+                    res.end(JSON.stringify(statusObj));
+                })
                 .catch(error => {
+                    errorObj = {};
+                    errorObj.status = "failed";
+                    errorObj.reason = "Failed to store User";
                     console.log(error);
-                    res.end("Failed to store User");
+                    res.end(JSON.stringify(errorObj));
                 })
         })
         .catch(error => {

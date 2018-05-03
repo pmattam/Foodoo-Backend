@@ -18,13 +18,17 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 // will change to enviroment variable when deploying
 // const secret = process.env.secretvarname
-const secret = process.env.SECRET
+const secret = process.env.SECRET;
+
+const path = require("path");
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 });
+
+app.use(express.static(path.join(__dirname, 'build')));
 
 // useful for grabing data out of post requests
 app.use(bodyParser.urlencoded({
